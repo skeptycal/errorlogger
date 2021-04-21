@@ -9,6 +9,8 @@
 **/*temp
 **/*tmp
 **/.waka*
+**/VERSION
+**/idea.md
 
 ### Repo Specific ###
 **/idea.md
@@ -340,7 +342,8 @@ _ide_*
 .LSOverride
 
 # Icon must end with two \r
-Icon
+Icon
+
 
 # Thumbnails
 ._*
@@ -655,4 +658,3 @@ zsdoc/data
 !/tests/_output/.gitkeep
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,linux,windows,ssh,vscode,go,zsh,node,vue,nuxt,python,django,flask,yarn,laravel,git
-
