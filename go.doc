@@ -1,5 +1,0 @@
-package errorlogger // import "github.com/skeptycal/errorlogger"
-
-Package errorlogger contains utilities for macOS.
-
-func Example()
