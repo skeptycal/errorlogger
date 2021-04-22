@@ -36,7 +36,7 @@ func (e *errorLogger) yesErr(err error) error {
 		if e.wrap != nil {
 			err = errors.Wrap(err, e.wrap.Error())
 		}
-		e.logFunc.Error(err)
+		e.logFunc(err)
 	}
 	return err
 }
