@@ -4,10 +4,10 @@ Package errorlogger implements error logging to a logrus log (or a standard
 library log) by providing a convenient way to log errors and to temporarily
 disable/enable logging.
 
-A global EL and Err with default behaviors are supplied that may be aliased
+A global Log and Err with default behaviors are supplied that may be aliased
 if you wish:
 
-    EL = errorlogger.EL
+    Log = errorlogger.Log
     Err = errorlogger.Err
 
 If you do not intend to use any options or disable the logger, it may be
@@ -42,12 +42,14 @@ Example:
      }
      e.Disable() // can be disabled and enabled as desired
 
-var DefaultLogger ...
-var EL = New()
-var Err = EL.Err
-var Log *logrus.Logger = DefaultLogger
+var Log = New() ...
+var ErrInvalidWriter = os.ErrInvalid
 func Example()
+func SetJSONFormatter()
+func SetLogOutput(w io.Writer) error
+func SetTextFormatter()
 type ErrorLogger interface{ ... }
     func New() ErrorLogger
-    func NewWithOptions(enabled bool, fn loggerFunc, wrap error) ErrorLogger
+    func NewWithOptions(enabled bool, fn LoggerFunc, wrap error) ErrorLogger
 type Level = logrus.Level
+type LoggerFunc = func(args ...interface{})
