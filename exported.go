@@ -76,6 +76,11 @@ func NewWithOptions(enabled bool, fn LoggerFunc, wrap error) ErrorLogger {
 	return e
 }
 
+func (e *errorLogger) SetOptions(o Options) error {
+	// TODO - stuff
+	return nil
+}
+
 // SetLogOutput sets the output writer for logging.
 // The default is os.Stderr. Any io.Writer can be setup
 // to receive messages.
@@ -89,57 +94,6 @@ func SetLogOutput(w io.Writer) error {
 	}
 }
 
-// SetTextFormatter sets the log formatter to the default text
-// log formatter for use with TTY logging. Use
-//  Log.SetJSONFormatter(defaultJSONFormatter)
-// to return to set JSON formatting of logs.
-//
-// Many third party logging formatters are available.
-//
-// - FluentdFormatter. Formats entries that can be parsed by Kubernetes and Google Container Engine.
-//
-// - GELF. Formats entries so they comply to Graylog's GELF 1.1 specification.
-//
-// - logstash. Logs fields as Logstash Events.
-//
-// - prefixed. Displays log entry source along with alternative layout.
-//
-// - zalgo. Invoking the Power of Zalgo.
-//
-// - nested-logrus-formatter. Converts logrus fields to a nested structure.
-//
-// - powerful-logrus-formatter. get fileName, log's line number and the latest function's name when print log; Sava log to files.
-//
-// - caption-json-formatter. logrus's message json formatter with human-readable caption added.
-// Reference: https://pkg.go.dev/github.com/sirupsen/logrus#TextFormatter
 func SetTextFormatter() {
 	log.SetFormatter(defaultTextFormatter)
-}
-
-// SetJSONFormatter sets the log formatter to a logrus JSON
-// formatter with default characteristics. Use
-//  Log.SetJSONFormatter(defaultTextFormatter)
-// to return to default text formatting of logs.
-//
-// Many third party logging formatters are available.
-//
-// - FluentdFormatter. Formats entries that can be parsed by Kubernetes and Google Container Engine.
-//
-// - GELF. Formats entries so they comply to Graylog's GELF 1.1 specification.
-//
-// - logstash. Logs fields as Logstash Events.
-//
-// - prefixed. Displays log entry source along with alternative layout.
-//
-// - zalgo. Invoking the Power of Zalgo.
-//
-// - nested-logrus-formatter. Converts logrus fields to a nested structure.
-//
-// - powerful-logrus-formatter. get fileName, log's line number and the latest function's name when print log; Sava log to files.
-//
-// - caption-json-formatter. logrus's message json formatter with human-readable caption added.
-//
-// Reference: https://pkg.go.dev/github.com/sirupsen/logrus#JSONFormatter
-func SetJSONFormatter() {
-	log.SetFormatter(defaultJSONFormatter)
 }

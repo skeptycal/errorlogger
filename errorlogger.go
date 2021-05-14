@@ -93,10 +93,14 @@ type ErrorLogger interface {
 	Enable()
 
 	// EnableText enables text formatting of log errors (default)
-	EnableText()
+	SetText()
 
 	// EnableJSON enables JSON formatting of log errors
-	EnableJSON()
+	SetJSON()
+
+	// SetOptions accepts an Options set and adjust the
+	// ErrorLogger options accordingly. Any options that are not included are ignored. The Options struct has methods for managing, saving and loading Options sets.
+	SetOptions(o Options) error
 
 	// LogLevel sets the logging level from a string value.
 	// Allowed values: Panic, Fatal, Error, Warn, Info, Debug, Trace
@@ -119,6 +123,22 @@ type ErrorLogger interface {
 	logrus.Ext1FieldLogger
 }
 
+// Options is Pretty options
+type Options struct {
+	// Width is an max column width for single line arrays
+	// Default is 80
+	Width int
+	// Prefix is a prefix for all lines
+	// Default is an empty string
+	Prefix string
+	// Indent is the nested indentation
+	// Default is two spaces
+	Indent string
+	// SortKeys will sort the keys alphabetically
+	// Default is false
+	SortKeys bool
+}
+
 // errorLogger implements ErrorLogger with logrus or the
 // standard library log package.
 type errorLogger struct {
@@ -135,13 +155,77 @@ func (e *errorLogger) SetErrorWrap(wrap error) {
 	e.wrap = wrap
 }
 
-// EnableText enables text formatting of log errors (default)
-func (e *errorLogger) EnableText() {
+// SetText sets the log format to Text. This is the default and
+// it provides ANSI colorized TTY output to os.Stderr by default.
+//
+// Use SetJSON() to switch to the JSON formatter.
+//
+// In general, Log.Setformatter() can be used to set any
+// custom formatter.
+//
+// Many other third party logging formatters are available.
+//
+// - FluentdFormatter. Formats entries that can be parsed by Kubernetes and Google Container Engine.
+//
+// - GELF. Formats entries so they comply to Graylog's GELF 1.1 specification.
+//
+// - logstash. Logs fields as Logstash Events.
+//
+// - prefixed. Displays log entry source along with alternative layout.
+//
+// - zalgo. Invoking the Power of Zalgo.
+//
+// - nested-logrus-formatter. Converts logrus fields to a nested structure.
+//
+// - powerful-logrus-formatter. get fileName, log's line number and the latest function's name when print log; Sava log to files.
+//
+// - caption-json-formatter. logrus's message json formatter with human-readable caption added.
+// Reference: https://pkg.go.dev/github.com/sirupsen/logrus#TextFormatter
+func (e *errorLogger) SetText() {
 	e.Logger.SetFormatter(defaultTextFormatter)
 }
 
-// EnableJSON enables JSON formatting of log errors
-func (e *errorLogger) EnableJSON() {
+// SetText sets the log format to Text. This is the default and
+// it provides ANSI colorized TTY output to os.Stderr by default.
+//
+// Use SetJSON() to switch to the JSON formatter.
+//
+// In general, Log.Setformatter() can be used to set any
+// custom formatter.
+//
+// Many other third party logging formatters are available.
+
+// SetJSON sets the log format to JSON. The JSON output conforms
+// to
+// The default is compact
+// "ugly" json.
+
+// Use SetText() to return to the
+// default Text formatter.
+//
+// In general, Log.Setformatter() can be used to set any
+// custom formatter.
+//
+// Many other third party logging formatters are available.
+//
+// - FluentdFormatter. Formats entries that can be parsed by Kubernetes and Google Container Engine.
+//
+// - GELF. Formats entries so they comply to Graylog's GELF 1.1 specification.
+//
+// - logstash. Logs fields as Logstash Events.
+//
+// - prefixed. Displays log entry source along with alternative layout.
+//
+// - zalgo. Invoking the Power of Zalgo.
+//
+// - nested-logrus-formatter. Converts logrus fields to a nested structure.
+//
+// - powerful-logrus-formatter. get fileName, log's line number and the latest function's name when print log; Sava log to files.
+//
+// - caption-json-formatter. logrus's message json formatter with human-readable caption added.
+//
+// Reference: https://pkg.go.dev/github.com/sirupsen/logrus#JSONFormatter
+func (e *errorLogger) SetJSON() {
 	e.Logger.SetFormatter(defaultJSONFormatter)
 }
 
