@@ -45,7 +45,6 @@ Example:
 var Log = New() ...
 var ErrInvalidWriter = os.ErrInvalid
 func Example()
-func SetJSONFormatter()
 func SetLogOutput(w io.Writer) error
 func SetTextFormatter()
 type ErrorLogger interface{ ... }
@@ -53,3 +52,4 @@ type ErrorLogger interface{ ... }
     func NewWithOptions(enabled bool, fn LoggerFunc, wrap error) ErrorLogger
 type Level = logrus.Level
 type LoggerFunc = func(args ...interface{})
+type Options struct{ ... }
