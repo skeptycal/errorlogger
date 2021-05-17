@@ -39,41 +39,21 @@
 package errorlogger
 
 import (
-	"github.com/sirupsen/logrus"
+	"io"
 )
 
-const (
-	defaultLogLevel logrus.Level = logrus.InfoLevel
-	defaultEnabled  bool         = true
-)
+const defaultEnabled bool = true
 
 // Defaults for ErrorLogger
 var (
 	// defaultLogFunc is Log.Error, which will log messages
 	// of level ErrorLevel or higher.
-	defaultLogFunc LoggerFunc = log.Error
+	defaultLogFunc LoggerFunc = defaultlogger.Error
 
 	// defaultErrWrap is the default error used to wrap
 	// errors processed with Err. A <nil> value disables
 	// error wrapping.
 	defaultErrWrap error = nil
-
-	// defaultTextFormatter is the default log formatter. Use
-	//  Log.SetFormatter()
-	// to change to another logrus formatter or
-	//  Log.SetJSONFormatter(defaultTextFormatter)
-	// to return to default text formatting of logs.
-	//
-	// Reference: https://pkg.go.dev/github.com/sirupsen/logrus#TextFormatter
-	defaultTextFormatter logrus.Formatter = new(logrus.TextFormatter)
-
-	// defaultJSONFormatter is the a JSON formatter with
-	// default characteristics. Use
-	//  Log.SetJSONFormatter(defaultJSONFormatter)
-	// to enable JSON logging.
-	//
-	// Reference: https://pkg.go.dev/github.com/sirupsen/logrus#JSONFormatter
-	defaultJSONFormatter logrus.Formatter = new(logrus.JSONFormatter)
 )
 
 // ErrorLogger implements error logging to a logrus log
@@ -81,8 +61,8 @@ var (
 // methods, advanced formatting options, more automated
 // logging, a more efficient way to log errors within
 // code, and methods to temporarily disable/enable
-// logging, such as in the case of performance optimization
-// or during critical code blocks.
+// logging, such as in the case of performance
+// optimization or during critical code blocks.
 type ErrorLogger interface {
 
 	// Disable disables logging and sets a no-op function for
@@ -120,7 +100,7 @@ type ErrorLogger interface {
 	// returned to be of type *os.PathError
 	SetErrorWrap(wrap error)
 
-	logrus.Ext1FieldLogger
+	LogrusLogger
 }
 
 // Options is Pretty options
@@ -146,7 +126,7 @@ type errorLogger struct {
 	wrap    error                 // `default:"nil"` // nil = disabled
 	errFunc func(err error) error // `default:"()yesErr"`
 	logFunc LoggerFunc            // `default:"logrus.New()"`
-	*logrus.Logger
+	*Logger
 }
 
 // SetErrorType allows ErrorLogger to wrap errors in a specified custom message.
@@ -155,56 +135,25 @@ func (e *errorLogger) SetErrorWrap(wrap error) {
 	e.wrap = wrap
 }
 
-// SetText sets the log format to Text. This is the default and
-// it provides ANSI colorized TTY output to os.Stderr by default.
-//
-// Use SetJSON() to switch to the JSON formatter.
-//
-// In general, Log.Setformatter() can be used to set any
-// custom formatter.
-//
-// Many other third party logging formatters are available.
-//
-// - FluentdFormatter. Formats entries that can be parsed by Kubernetes and Google Container Engine.
-//
-// - GELF. Formats entries so they comply to Graylog's GELF 1.1 specification.
-//
-// - logstash. Logs fields as Logstash Events.
-//
-// - prefixed. Displays log entry source along with alternative layout.
-//
-// - zalgo. Invoking the Power of Zalgo.
-//
-// - nested-logrus-formatter. Converts logrus fields to a nested structure.
-//
-// - powerful-logrus-formatter. get fileName, log's line number and the latest function's name when print log; Sava log to files.
-//
-// - caption-json-formatter. logrus's message json formatter with human-readable caption added.
-// Reference: https://pkg.go.dev/github.com/sirupsen/logrus#TextFormatter
-func (e *errorLogger) SetText() {
-	e.Logger.SetFormatter(defaultTextFormatter)
-}
-
-// SetText sets the log format to Text. This is the default and
-// it provides ANSI colorized TTY output to os.Stderr by default.
-//
-// Use SetJSON() to switch to the JSON formatter.
-//
-// In general, Log.Setformatter() can be used to set any
-// custom formatter.
-//
-// Many other third party logging formatters are available.
-
 // SetJSON sets the log format to JSON. The JSON output conforms
-// to
-// The default is compact
-// "ugly" json.
-
-// Use SetText() to return to the
-// default Text formatter.
+// to RFC 7159 (https://www.rfc-editor.org/rfc/rfc7159.html) from
+// March 2014.
 //
-// In general, Log.Setformatter() can be used to set any
-// custom formatter.
+// It should be noted that this format has been obsoleted the
+// latest version of the JSON standard from December 2017,
+// RFC 8259 (https://datatracker.ietf.org/doc/html/rfc8259)
+//
+// The default is compact "ugly" json. A "pretty" format can be
+// selected with
+//  Log.SetOptions()
+//
+// Use
+//  Log.SetText()
+// to return to the default Text formatter.
+//
+// In general,
+//  Log.Setformatter(myformatter)
+// can be used to set any custom formatter.
 //
 // Many other third party logging formatters are available.
 //
@@ -226,11 +175,29 @@ func (e *errorLogger) SetText() {
 //
 // Reference: https://pkg.go.dev/github.com/sirupsen/logrus#JSONFormatter
 func (e *errorLogger) SetJSON() {
-	e.Logger.SetFormatter(defaultJSONFormatter)
+	e.SetFormatter(defaultJSONFormatter)
 }
 
+// SetLoggerFunc sets the logger function that is used to
+// write log messages. This allows rapid switching between loggers
+// as well as turning the logging off and on regularly.
+//
+// The default is Log.Error(err), which is compatible with
+// the standard library log package and logrus. Setting this to
+// a no-op function allows fast pass through of logging
+// information that is not useful to record permanently.
+//
+// The function signature must be of type LoggerFunc:
+//  func(args ...interface{}).
+func (e *errorLogger) SetLoggerFunc(fn LoggerFunc) {
+	e.logFunc = fn
+}
+
+// SetLogLevel converts lvl to a compatible log level and sets the log level.
+//
+// Allowed values: Panic, Fatal, Error, Warn, Info, Debug, Trace
 func (e *errorLogger) SetLogLevel(lvl string) error {
-	level, err := logrus.ParseLevel(lvl)
+	level, err := ParseLevel(lvl)
 	if err != nil {
 		return Err(err)
 	}
@@ -238,12 +205,55 @@ func (e *errorLogger) SetLogLevel(lvl string) error {
 	return nil
 }
 
-// SetLoggerFunc allows setting of the logger function.
-// The default is Log.Error(err), which is compatible with
-// the standard library log package and logrus.
+// SetLogOutput sets the output writer for logging.
+// The default is os.Stderr. Any io.Writer can be setup
+// to receive messages.
+func (e *errorLogger) SetLogOutput(w io.Writer) error {
+	switch v := w.(type) {
+	case io.Writer:
+		e.SetOutput(v)
+		return nil
+	default:
+		return Err(ErrInvalidWriter)
+	}
+}
+
+func (e *errorLogger) SetOptions(o Options) error {
+	// TODO - stuff
+	return nil
+}
+
+// SetText sets the log format to Text. This is the default
+// formatter.
 //
-// The function signature must be of type LoggerFunc:
-//  func(args ...interface{}).
-func (e *errorLogger) SetLoggerFunc(fn LoggerFunc) {
-	e.logFunc = fn
+// It provides ANSI colorized (if available) TTY output to os.Stderr.
+//
+// Use
+//  Log.SetJSON()
+// to switch to the JSON formatter.
+//
+// In general,
+//  Log.Setformatter(myformatter)
+// can be used to set any custom formatter.
+//
+// Many other third party logging formatters are available.
+//
+// - FluentdFormatter. Formats entries that can be parsed by Kubernetes and Google Container Engine.
+//
+// - GELF. Formats entries so they comply to Graylog's GELF 1.1 specification.
+//
+// - logstash. Logs fields as Logstash Events.
+//
+// - prefixed. Displays log entry source along with alternative layout.
+//
+// - zalgo. Invoking the Power of Zalgo.
+//
+// - nested-logrus-formatter. Converts logrus fields to a nested structure.
+//
+// - powerful-logrus-formatter. get fileName, log's line number and the latest function's name when print log; Sava log to files.
+//
+// - caption-json-formatter. logrus's message json formatter with human-readable caption added.
+// Reference: https://pkg.go.dev/github.com/sirupsen/logrus#TextFormatter
+func (e *errorLogger) SetText() {
+	e.SetFormatter(defaultTextFormatter)
 }

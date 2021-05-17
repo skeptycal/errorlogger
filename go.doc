@@ -43,13 +43,25 @@ Example:
      e.Disable() // can be disabled and enabled as desired
 
 var Log = New() ...
-var ErrInvalidWriter = os.ErrInvalid
+var ParseLevel ...
 func Example()
-func SetLogOutput(w io.Writer) error
-func SetTextFormatter()
+type Entry = logrus.Entry
 type ErrorLogger interface{ ... }
     func New() ErrorLogger
     func NewWithOptions(enabled bool, fn LoggerFunc, wrap error) ErrorLogger
+type Ext1FieldLogger = logrus.Ext1FieldLogger
+type Fields = logrus.Fields
+type Formatter = logrus.Formatter
+type Hook = logrus.Hook
 type Level = logrus.Level
+type LevelHooks = logrus.LevelHooks
+type LogFunction = logrus.LogFunction
+type Logger = logrus.Logger
 type LoggerFunc = func(args ...interface{})
+type LogrusCommonOptions interface{ ... }
+type LogrusFieldLogger = logrus.FieldLogger
+type LogrusLogFunctions interface{ ... }
+type LogrusLogger interface{ ... }
+type LogrusLoggerComplete interface{ ... }
+type LogrusOptions interface{ ... }
 type Options struct{ ... }
