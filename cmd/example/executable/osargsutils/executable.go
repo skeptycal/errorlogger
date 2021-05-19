@@ -11,47 +11,42 @@ import (
 var log = errorlogger.Log
 var Err = log.Err
 
-// Arg0 returns the absolute path for the executable that started
-// the current process. There is no guarantee that the path is
-// still pointing to the correct executable. Symlinks are evaluated
-// if necessary.
-//
-// Executable returns an absolute path unless an error occurred.
-//
-// The main use case is finding resources located relative to an executable.
+// Arg0 returns the absolute path name for the executable that started the
+// current process. EvalSymlinks is run on the resulting path to provide a
+// stable result.
 func Arg0() (string, error) {
 	// As of Go 1.8 (Released February 2017) the recommended
-	// way of doing this is with os.Executable:
-	ex, err := os.Executable()
-	if err != nil {
-		return "", Err(err)
-	}
-
-	return filepath.EvalSymlinks(ex)
+	// way of doing this is with os.Executable.
+	return zeroOsExecutable()
 }
 
-// HereMe returns the basename (me) and folder (here) of
-// the executable that started the current process.
 func HereMe() (string, string, error) {
+	// hereMe returns the folder (here) and basename (me) of
+	// the executable that started the current process.
+	return hereMe()
+}
+
+// hereMe returns the folder (here) and basename (me) of
+// the executable that started the current process.
+func hereMe() (string, string, error) {
 	// As of Go 1.8 (Released February 2017) the recommended
 	// way of doing this is with os.Executable:
-	ex, err := os.Executable()
+	zero, err := Arg0()
 	if err != nil {
 		return "", "", Err(err)
 	}
 
-	zero, err := filepath.EvalSymlinks(ex)
-	if err != nil {
-		return "", "", Err(err)
-	}
-
+	// TODO - using path.Split() returns dir ending
+	// with a slash, where Dir() would not
 	return filepath.Dir(zero), filepath.Base(zero), nil
 }
 
 // hereMe2 returns the folder (here) and basename (me) of
 // the executable that started the current process.
 func hereMe2() (string, string, error) {
-	zero, err := zeroOsExecutable()
+	// As of Go 1.8 (Released February 2017) the recommended
+	// way of doing this is with os.Executable:
+	zero, err := Arg0()
 	if err != nil {
 		return "", "", Err(err)
 	}
@@ -84,5 +79,6 @@ func zeroOsExecutable() (string, error) {
 }
 
 func rawOsArgsZero() (string, error) {
-	return os.Args[0], nil
+	ex := os.Args[0]
+	return filepath.EvalSymlinks(ex)
 }
