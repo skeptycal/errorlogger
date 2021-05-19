@@ -105,14 +105,14 @@ var (
 
 // Defaults for ErrorLogger
 var (
-	// defaultLogFunc is Log.Error, which will log messages
+	// DefaultLogFunc is Log.Error, which will log messages
 	// of level ErrorLevel or higher.
-	defaultLogFunc LoggerFunc = defaultlogger.Error
+	DefaultLogFunc LoggerFunc = defaultlogger.Error
 
-	// defaultErrWrap is the default error used to wrap
+	// DefaultErrWrap is the default error used to wrap
 	// errors processed with Err. A <nil> value disables
 	// error wrapping.
-	defaultErrWrap error = nil
+	DefaultErrWrap error = nil
 )
 
 // LoggerFunc defines the function signature used when logging errors.
@@ -170,7 +170,7 @@ type ErrorLogger interface {
 // instead of creating a new instance. For example:
 //  var mylogthatwontmessthingsup = errorlogger.Log
 func New() ErrorLogger {
-	return NewWithOptions(defaultEnabled, defaultLogFunc, defaultErrWrap)
+	return NewWithOptions(defaultEnabled, DefaultLogFunc, DefaultErrWrap)
 }
 
 // NewWithOptions returns a new ErrorLogger with options determined
@@ -182,6 +182,17 @@ func New() ErrorLogger {
 //
 // - wrap: defines a custom error type to wrap all errors in.
 func NewWithOptions(enabled bool, fn LoggerFunc, wrap error) ErrorLogger {
+
+	if fn == nil {
+		fn = DefaultLogFunc
+	}
+
+	if wrap == nil {
+		// the defaultErrWrap is actually nil ... so this is not needed.
+		// However, if the default is later changed to a package-wide
+		// wrapper, this will be a valid check
+		wrap = DefaultErrWrap
+	}
 	e := errorLogger{
 		wrap:    wrap,
 		logFunc: fn,
