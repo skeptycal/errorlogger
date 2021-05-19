@@ -40,6 +40,8 @@ package errorlogger
 
 import (
 	"io"
+
+	"github.com/sirupsen/logrus"
 )
 
 const defaultEnabled bool = true
@@ -126,7 +128,7 @@ type errorLogger struct {
 	wrap    error                 // `default:"nil"` // nil = disabled
 	errFunc func(err error) error // `default:"()yesErr"`
 	logFunc LoggerFunc            // `default:"logrus.New()"`
-	*Logger
+	*logrus.Logger
 }
 
 // SetErrorType allows ErrorLogger to wrap errors in a specified custom message.
@@ -197,7 +199,7 @@ func (e *errorLogger) SetLoggerFunc(fn LoggerFunc) {
 //
 // Allowed values: Panic, Fatal, Error, Warn, Info, Debug, Trace
 func (e *errorLogger) SetLogLevel(lvl string) error {
-	level, err := ParseLevel(lvl)
+	level, err := logrus.ParseLevel(lvl)
 	if err != nil {
 		return Err(err)
 	}
