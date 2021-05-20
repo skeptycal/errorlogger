@@ -101,10 +101,7 @@ var (
 	// ErrInvalidWriter is returned when an output writer is
 	// nil or does not implement io.Writer.
 	ErrInvalidWriter = os.ErrInvalid
-)
 
-// Defaults for ErrorLogger
-var (
 	// DefaultLogFunc is Log.Error, which will log messages
 	// of level ErrorLevel or higher.
 	DefaultLogFunc LoggerFunc = defaultlogger.Error
