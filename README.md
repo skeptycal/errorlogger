@@ -16,24 +16,18 @@
 
 ### Prerequisites
 
-- [Go](https://golang.org/)
-- [Git](https://git-scm.com/)
-- [GitHub CLI](https://cli.github.com/)
+-   [Go](https://golang.org/)
+-   [Git](https://git-scm.com/)
+-   [GitHub CLI](https://cli.github.com/)
 -
 
-Developed with $( go version; ). Go is _extremely_ backwards compatible and semver stable. Nearly any v1.x should work fine.
+Developed with 1.16.4. Go is _extremely_ backwards compatible and semver stable. Nearly any v1.x should work fine.
 
 ---
 
 ### Installation
 
-To use this repo as a template for your own project:
-
-```sh
-gh repo create -y --public --template "https://github.com/skeptycal/errorlogger"
-```
-
-Clone this repo to test and contribute:
+To build and install this package as a utility on your machine.
 
 ```bash
 # add repo to $GOPATH (xxxxxx is your computer login username)
@@ -46,6 +40,27 @@ cd ${GOPATH}/src/github.com/xxxxxx/errorlogger
 
 # install as a utility package
 go install
+
+```
+
+### Use Template
+
+To use this repo as a template for your own project:
+
+```sh
+gh repo create -y --public --template "https://github.com/skeptycal/errorlogger"
+```
+
+### Contributing
+
+To clone this repo to test and contribute, use `git clone` or `gh clone`.
+
+```sh
+gh repo clone skeptycal/errorlogger
+
+cd errorlogger
+
+git branch -b dev
 
 ```
 
@@ -97,8 +112,8 @@ We use SemVer for versioning. For the versions available, see the tags on this r
 
 ## Contributors and Inspiration
 
-- Michael Treanor ([GitHub][github] / [Twitter][twitter]) - Initial work, updates, maintainer
-- [Francesc Campoy][campoy] - Inspiration and great YouTube videos!
+-   Michael Treanor ([GitHub][github] / [Twitter][twitter]) - Initial work, updates, maintainer
+-   [Francesc Campoy][campoy] - Inspiration and great YouTube videos!
 
 See also the list of contributors who participated in this project.
 
