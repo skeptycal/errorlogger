@@ -6,6 +6,10 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+// NewJSONFormatter returns a new Formatter that
+// is initialized and ready to use.
+//
+// For pretty printing, set pretty == true.
 func NewJSONFormatter(pretty bool) Formatter {
 	f := new(JSONFormatter)
 	f.PrettyPrint = pretty

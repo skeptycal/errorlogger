@@ -25,11 +25,17 @@ func (e *errorLogger) Err(err error) error {
 
 // noErr is a no-op errorFunc for disabling logging without
 // constant repetitive flag checks or other hacks.
+// https://en.wikipedia.org/wiki/NOP_(code)
 func (e *errorLogger) noErr(err error) error {
+	// TODO does this really need to return an error?
+	// TODO does the compiler remove this?
+	// TODO would a pointer be better here? *(&err)
+	// TODO does the compiler remove this?
 	return err
 }
 
-// yesErr is an errorFunc that logs and wraps an error, then returns the errorunchanged.
+// yesErr is an errorFunc that logs and wraps an error, then
+// returns the errorunchanged.
 func (e *errorLogger) yesErr(err error) error {
 	if err != nil {
 		if e.wrap != nil {
