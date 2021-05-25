@@ -2,45 +2,38 @@
 // https://github.com/skeptycal
 // MIT License
 
-// Package errorlogger implements error logging to a logrus log
-// (or a standard library log) by providing a convenient way to
-// log errors and to temporarily disable/enable logging.
+// Package errorlogger implements error logging to a variety of
+// output formats. The goal of this package is to provide a simple
+// and efficient mechanism for managing, testing, debugging, and
+// changing options for error logging throughout a program.
 //
-// A global Log with a logging function with default behaviors is supplied:
-//  var Log = errorlogger.Log
+// It is a drop-in replacement for the standard library log package
+// and the popular Logrus package.
+//
+// Code like this works as expected without any changes:
+//  log.Errorf("this is an error: %v", err)
+//  log.Fatal("no input file provided.")
+//
+// Usage
+//
+// A global logger with a default logging function is supplied:
+//  var log = errorlogger.Log
+//  log.Error("sample log error message")
+//
+// using the variable 'log' matches most code using the standard
+// library 'log' package or Logrus package.
+//
+// Logging
+//
+// The default global error logging function is supplied.
 //  var Err = errorlogger.Err
 //
-// they may be aliased if there is a concern about name collisions:
-//  var LogThatWontConflict = errorlogger.Log
-//  var ErrThatWontConflict = errorlogger.Err
+// Err wraps errors, adds custom messages, formats errors, and outputs
+// messages to the correct io.Writer as specified in the options.
 //
-// By default, logging is enabled and ANSI colorized text is sent to
-// stderr of the TTY. If it is changed and you wish to return to text
-// logging, use
-//  Log.SetText()
-//
-// Logging to JSON is included and may be set with
-//  Log.SetJSON()
-//
-// Logging can also be redirected to a file or any io.Writer
-//  Log.SetLogOutput(w io.Writer)
-//
-// The verbosity of the logging may be adjusted. The default is "Info"
-// Allowed values are Panic, Fatal, Error, Warn, Info, Debug, Trace
-//	SetLogLevel(lvl string) error
-//
-// Error logging may be disabled during performance critical operations:
-// 	Log.Disable()
-//
-// In this case, the error function is replaced with a noop function. This
-// removed any enabled/disabled check and usually results in a performance
-// gain when compared to checking a flag during every possible operation
-// that may request logging.
-//
-// Logging is reenabled with
-//  Log.Enable()
-//
-// This may be done at any time and as often as desired.
+// Calling this function will perform all package-level logging
+// and error wrapping. It will then return the error otherwise
+// unchanged and ready to propagate up.
 //
 // If you do not intend to use any options or disable the logger,
 // it may be more convenient to use only the function alias to call the
@@ -56,23 +49,107 @@
 //  return Err(someProcess(stuff))
 //
 // or even this
-//  Err(someProcess(stuff))
+//  _ = Err(someProcess(stuff)) // log errors only and continue
 //
 // if the error does not need to be propagated (bubbled) up. (This is
 // not generally recommended.)
 //
-// SetLoggerFunc allows setting of the logger function.
+// Examples
+//
+// file open
+//  f, err := os.Open("myfile")
+//  if err != nil {
+//  	return Err(err)
+//  }
+// get environment variable
+//  env := os.Getenv("PATH")
+//  if env == "" {
+//  	return "", Err(os.ErrNotExist)
+//  }
+//  return env, nil
+// check return value while returning an error
+//  return Err(os.Chmod("myfile", 420))
+//
+// Defaults
+//
+// The global defaults may be aliased if there is a concern
+// about name collisions:
+//  var LogThatWontConflict = errorlogger.Log
+//  var ErrThatWontConflict = errorlogger.Err
+//
+// By default, logging is enabled and ANSI colorized text is sent to
+// stderr of the TTY. If it is changed and you wish to return to the
+// default text formatter, use
+//  log.SetText()
+//
+// Logging can also be redirected to a file or any io.Writer
+//  log.SetLogOutput(w io.Writer)
+//
+// To create a new logger with default behaviors, use:
+//  var log = errorlogger.New()
+// and start logging!
+//
+// (The defaults are output to os.Stderr, ANSI color, include
+// timestamps, logging enabled, default log level(INFO),
+// no error wrapping, default log function, and use default
+// Logrus logger as pass-through.)
+//
+// Customize
+//
+// If you want to customize the logger, use:
+//  NewWithOptions(enabled bool, fn LoggerFunc, wrap error, logger interface{}) ErrorLogger
+//
+// Some additional features of this package include:
+//
+// - easy configuration of JSON logging:
+//  log.EnableJSON(true) // true for pretty printing
+//
+// - return to the default text formatting
+//  log.SetText() // change to default text formatter
+//
+// - easy configuration of custom output formatting:
+//  log.SetFormatter(myJSONformatter) // set a custom formatter
+//
+// - easy configuration of numerous third party formatters.
+//
+//
+// - Set log level - the verbosity of the logging may be adjusted.
+// Allowed values are Panic, Fatal, Error, Warn, Info, Debug, Trace.
+// The default is "Info"
+//  log.SetLogLevel("INFO") // Set log level - uppercase string ...
+//  log.SetLogLevel("error") // ... or lowercase string accepted
+//
+// Performance
+//
+// Error logging may be disabled during performance critical operations:
+//  log.Disable() // temporarily disable logging
+//  defer log.Enable()  // enable logging after critical code
+//
+// In this case, the error function is replaced with a noop function. This
+// removed any enabled/disabled check and usually results in a performance
+// gain when compared to checking a flag during every possible operation
+// that may request logging.
+//
+// Logging is deferred or reenabled with
+//  log.Enable() // after performance sensitive portion, enable logging
+//
+// This may be done at any time and as often as desired.
+//
+// - SetLoggerFunc allows setting of a custom logger function.
 // The default is log.Error(), which is compatible with
 // the standard library log package and logrus.
-//  Log.SetLoggerFunc(fn LoggerFunc)
+//  log.SetLoggerFunc(fn LoggerFunc)
 //
-// SetErrorWrap allows ErrorLogger to wrap errors in a
-// specified custom type to work with errors.Is()
-//  Log.SetErrorWrap(wrap error)
+// - SetErrorWrap allows ErrorLogger to wrap errors in a
+// specified custom type for use with errors.Is():
+//  log.SetErrorWrap(wrap error)
 //
-// For example, if you want all errors returned to be of
-// type *os.PathError
-//  Log.SetErrorWrap(os.PathError)
+// For example, if you want all errors returned to be
+// considered type *os.PathError, use:
+//  log.SetErrorWrap(&os.PathError{})
+//
+// To wrap all errors in a custom type, use:
+//  log.SetErrorWrap(myErrType{}) // wrap all errors in a custom type
 package errorlogger
 
 import (
@@ -112,8 +189,11 @@ var (
 	DefaultErrWrap error = nil
 )
 
-// LoggerFunc defines the function signature used when logging errors.
+// LoggerFunc defines the function signature for logging functions.
 type LoggerFunc = func(args ...interface{})
+
+// ErrorFunc defines the function signature to choose the logging function.
+type ErrorFunc = func(err error) error
 
 // ErrorLogger implements error logging to a logrus log
 // (or a standard library log) by providing convenience
@@ -167,33 +247,50 @@ type ErrorLogger interface {
 // instead of creating a new instance. For example:
 //  var mylogthatwontmessthingsup = errorlogger.Log
 func New() ErrorLogger {
-	return NewWithOptions(defaultEnabled, DefaultLogFunc, DefaultErrWrap)
+	return NewWithOptions(defaultEnabled, DefaultLogFunc, DefaultErrWrap, defaultlogger)
 }
 
-// NewWithOptions returns a new ErrorLogger with options determined
-// by parameters.
+// NewWithOptions returns a new ErrorLogger with options
+// determined by parameters. To use defaults, use nil for
+// any option except 'enabled'.
 //
 // - enabled: defines the initial logging state.
 //
 // - fn: defines a custom logging function used to log information.
 //
 // - wrap: defines a custom error type to wrap all errors in.
-func NewWithOptions(enabled bool, fn LoggerFunc, wrap error) ErrorLogger {
+//
+// - logger: defines a custom logger to use.
+func NewWithOptions(enabled bool, fn LoggerFunc, wrap error, logger interface{}) ErrorLogger {
 
+	// use nil to implicitly initialize with default
 	if fn == nil {
 		fn = DefaultLogFunc
 	}
 
+	// use nil to implicitly initialize with default
 	if wrap == nil {
 		// the defaultErrWrap is actually nil ... so this is not needed.
 		// However, if the default is later changed to a package-wide
 		// wrapper, this will be a valid check
 		wrap = DefaultErrWrap
 	}
+
+	// use nil to implicitly initialize with default
+	if logger == nil {
+		logger = defaultlogger
+	}
+
+	// logger must implement the minimum logrusLogger interface.
+	// TODO - check for stdlib log package
+	if _, ok := logger.(logrusLogger); !ok {
+		logger = defaultlogger
+	}
+
 	e := errorLogger{
 		wrap:    wrap,
 		logFunc: fn,
-		Logger:  defaultlogger,
+		Logger:  logger.(*logrus.Logger),
 	}
 	if enabled {
 		e.Enable()
@@ -206,17 +303,32 @@ func NewWithOptions(enabled bool, fn LoggerFunc, wrap error) ErrorLogger {
 // errorLogger implements ErrorLogger with logrus or the
 // standard library log package.
 type errorLogger struct {
-	// enabled bool                  // `default:"true"`
-	wrap           error                 // `default:"nil"` // nil = disabled
-	errFunc        func(err error) error // `default:"()yesErr"`
-	logFunc        LoggerFunc            // `default:"defaultLogFunc"`
-	*logrus.Logger                       // `default:"defaultlogger"`
+	wrap           error      // `default:"nil"` // nil = disabled
+	msg            string     // `default:""` // the empty string = disabled
+	errFunc        ErrorFunc  // `default:"()yesErr"`
+	logFunc        LoggerFunc // `default:"defaultLogFunc"`
+	*logrus.Logger            // `default:"defaultlogger"`
 }
 
-// SetErrorType allows ErrorLogger to wrap errors in a specified custom message.
-// Setting wrap == "" will disable wrapping of errors.
+// SetErrorWrap allows ErrorLogger to wrap all errors in a
+// specified custom error type.
+// Example:
+//  log.SetErrorWrap(&os.PathError{})
+// Setting wrap == nil will disable wrapping of errors:
+//  log.SetErrorWrap(nil)
 func (e *errorLogger) SetErrorWrap(wrap error) {
 	e.wrap = wrap
+}
+
+// SetCustomMessage allows ErrorLogger to add a specified
+// custom string to all errors.
+// Example:
+//  log.SetCustomMessage("MyApp error occurred!")
+// Setting msg == "" will disable this feature:
+//  log.SetCustomMessage("")
+func (e *errorLogger) SetCustomMessage(msg string) {
+	// TODO not implemented in logging code yet ...
+	e.msg = msg
 }
 
 // SetJSON sets the log format to JSON. The JSON output conforms
@@ -259,6 +371,7 @@ func (e *errorLogger) SetErrorWrap(wrap error) {
 //
 // Reference: https://pkg.go.dev/github.com/sirupsen/logrus#JSONFormatter
 func (e *errorLogger) SetJSON(pretty bool) {
+	e.SetErrorWrap(&os.PathError{})
 	f := NewJSONFormatter(pretty)
 	e.SetFormatter(f)
 }
