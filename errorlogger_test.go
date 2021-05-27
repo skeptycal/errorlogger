@@ -48,8 +48,8 @@ func Test_errorLogger_SetErrorWrap(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			e.SetErrorWrap(tt.wrap)
-			got := e.yesErr(tt.input)
+			errorLoggerTestStruct.SetErrorWrap(tt.wrap)
+			got := errorLoggerTestStruct.yesErr(tt.input)
 			if errors.Is(got, fakeSysCallError) {
 				t.Errorf("SetErrorWrap(%s) did not wrap error: got %v, want %v", tt.name, got, tt.wrap)
 

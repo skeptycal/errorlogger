@@ -1,6 +1,7 @@
 package errorlogger
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/pkg/errors"
@@ -11,25 +12,34 @@ import (
 // and benchmarks in this package.
 
 var (
-	testDefaultLogger ErrorLogger    = New()
 	testLogrusLogger  *logrus.Logger = logrus.New()
+	testDefaultLogger ErrorLogger    = NewWithOptions(true, nil, nil, testLogrusLogger)
 	errFake           error          = errors.New("fake")
-	fakeSysCallError  error          = os.NewSyscallError("fake syscall error", errors.New("fake syscall error"))
+	fakeSysCallError  error          = os.NewSyscallError("fake syscall error", fmt.Errorf("fake syscall error"))
 )
 
+// internal tests directly on private structs
 var (
-	e = newTestStruct(true, nil, nil, nil)
-	w = newTestStruct(true, fakeSysCallError, nil, nil)
+	errorLoggerTestStruct = newTestStruct(true, "", nil, nil, nil)
+	wrapTestStruct        = newTestStruct(true, "", fakeSysCallError, nil, nil)
+	messageTestStruct     = newTestStruct(true, "fake test message", nil, nil, nil)
 
-	errFuncTestList = []struct {
+	privateStructTests = []struct {
 		name string
-		fn   func(err error) error
+		e    *errorLogger
 	}{
-		{"noErr", e.noErr},
-		{"yesErr", e.yesErr},
-		{"noErr", w.noErr},
-		{"yesErr", w.yesErr},
+		{"errorLoggerTestStruct", errorLoggerTestStruct},
+		{"wrapTestStruct", wrapTestStruct},
+		{"messageTestStruct", messageTestStruct},
 	}
+
+	// errFuncTestList = []struct {
+	// 	name string
+	// 	fn   func(err error) error
+	// }{
+	// 	{"noErr", (errorLogger).noErr},
+	// 	{"yesErr", yesErr},
+	// }
 
 	// errorloggerTests provide a set of instantiated errorloggers
 	// used for tests.
@@ -69,7 +79,7 @@ var (
 	}
 )
 
-func newTestStruct(enabled bool, wrap error, fn func(args ...interface{}), logger *logrus.Logger) *errorLogger {
+func newTestStruct(enabled bool, msg string, wrap error, fn func(args ...interface{}), logger *logrus.Logger) *errorLogger {
 	if fn == nil {
 		fn = DefaultLogFunc
 	}
@@ -87,6 +97,7 @@ func newTestStruct(enabled bool, wrap error, fn func(args ...interface{}), logge
 
 	e := &errorLogger{
 		wrap:    wrap,
+		msg:     msg,
 		logFunc: fn,
 		Logger:  logger,
 	}
