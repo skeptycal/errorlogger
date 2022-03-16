@@ -13,9 +13,9 @@ const (
 
 	// InfoLevel level. General operational entries about what's going on inside the
 	// application.
-	defaultLogLevel logrus.Level = logrus.InfoLevel
+	defaultLogLevel Level = InfoLevel
 
-	// DefaultTimestampFormat is time.RFC3339
+	// DefaultTimestampFormat is time.RFC3339FA
 	//
 	// Note that this is not the most current standard but it is the
 	// most stable and recommended with the Go standard library.
@@ -41,7 +41,33 @@ const (
 	DefaultTimestampFormat string = time.RFC3339
 )
 
+// These are the different logging levels. You can set the logging level to log
+// on your instance of logger, obtained with `logrus.New()`.
+const (
+	// PanicLevel level, highest level of severity. Logs and then calls panic with the
+	// message passed to Debug, Info, ...
+	PanicLevel Level = iota
+	// FatalLevel level. Logs and then calls `logger.Exit(1)`. It will exit even if the
+	// logging level is set to Panic.
+	FatalLevel
+	// ErrorLevel level. Logs. Used for errors that should definitely be noted.
+	// Commonly used for hooks to send errors to an error tracking service.
+	ErrorLevel
+	// WarnLevel level. Non-critical entries that deserve eyes.
+	WarnLevel
+	// InfoLevel level. General operational entries about what's going on inside the
+	// application.
+	InfoLevel
+	// DebugLevel level. Usually only enabled when debugging. Very verbose logging.
+	DebugLevel
+	// TraceLevel level. Designates finer-grained informational events than the Debug.
+	TraceLevel
+)
+
 var (
+	// A constant exposing all logging levels
+	AllLevels = logrus.AllLevels
+
 	// defaultlogger initializes a default logrus logger.
 	// Reference: https://github.com/sirupsen/logrus/
 	defaultlogger = &logrus.Logger{
@@ -53,6 +79,9 @@ var (
 )
 
 type (
+	// Level type
+	Level = logrus.Level
+
 	// The Formatter interface is used to implement a custom Formatter.
 	// It takes an `Entry`. It exposes all the fields, including the
 	// default ones:
@@ -121,8 +150,8 @@ type (
 	// logrusCommonOptions implements several common options
 	// that should be in the basic LogrusLogger interface.
 	logrusCommonOptions interface {
-		SetLevel(level logrus.Level)
-		GetLevel() logrus.Level
+		SetLevel(level Level)
+		GetLevel() Level
 		SetFormatter(formatter logrus.Formatter)
 		SetOutput(output io.Writer)
 	}
@@ -148,7 +177,7 @@ type (
 		Exit(code int)
 		SetNoLock()
 		AddHook(hook logrus.Hook)
-		IsLevelEnabled(level logrus.Level) bool
+		IsLevelEnabled(level Level) bool
 		SetReportCaller(reportCaller bool)
 		ReplaceHooks(hooks logrus.LevelHooks) logrus.LevelHooks
 	}

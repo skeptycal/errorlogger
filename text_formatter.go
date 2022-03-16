@@ -103,7 +103,7 @@ type TextFormatter struct {
 
 // NewTextFormatter returns a new TextFormatter that
 // is initialized and ready to use.
-func NewTextFormatter() Formatter {
+func NewTextFormatter() *TextFormatter {
 	return &TextFormatter{}
 }
 

@@ -6,23 +6,27 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+// JSONFormatter formats logs into parsable json.
+// It is composed of logrus.JSONFormatter with additional
+// formatting methods.
+type JSONFormatter struct{ logrus.JSONFormatter }
+
 // NewJSONFormatter returns a new Formatter that
 // is initialized and ready to use.
 //
 // For pretty printing, set pretty == true.
-func NewJSONFormatter(pretty bool) Formatter {
-	f := new(JSONFormatter)
-	f.PrettyPrint = pretty
+func NewJSONFormatter(pretty bool) *JSONFormatter {
+	f := &JSONFormatter{logrus.JSONFormatter{}}
+	f.SetPrettyPrint(pretty)
 	return f
 }
 
-// JSONFormatter formats logs into parsable json.
-// It is composed of logrus.JSONFormatter with additional
-// formatting methods.
-type JSONFormatter struct{ *logrus.JSONFormatter }
+func (f *JSONFormatter) Formatter() Formatter {
+	return &f.JSONFormatter
+}
 
 // SetTimestampFormat sets the format used for marshaling timestamps.
-// The format to use is the same than for time.Format or time.Parse
+// The format to use is the same as for time.Format or time.Parse
 // from the standard library.
 // The standard Library already provides a set of predefined formats.
 // The recommended and default format is RFC3339.

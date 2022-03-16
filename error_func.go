@@ -6,6 +6,20 @@ package errorlogger
 
 import "github.com/pkg/errors"
 
+type NopWriter struct{}
+
+// nopWriter_Write returns 0, nil no matter what the input is.
+func (NopWriter) Write(b []byte) (n int, err error) {
+	return 0, nil
+}
+
+type LenWriter struct{}
+
+// nopWriter_Write returns 0, nil no matter what the input is.
+func (LenWriter) Write(b []byte) (n int, err error) {
+	return 0, nil
+}
+
 // Disable disables logging and sets a no-op function for
 // Err() to prevent slowdowns while logging is disabled.
 func (e *errorLogger) Disable() {
@@ -20,6 +34,9 @@ func (e *errorLogger) Enable() {
 // Err logs an error to the provided logger, if it is enabled,
 // and returns the error unchanged to be propagated up.
 func (e *errorLogger) Err(err error) error {
+	if err == nil {
+		return nil
+	}
 	return e.errFunc(err)
 }
 
@@ -35,13 +52,15 @@ func (e *errorLogger) noErr(err error) error {
 }
 
 // yesErr is an errorFunc that logs and wraps an error, then
-// returns the errorunchanged.
+// returns the error unchanged.
 func (e *errorLogger) yesErr(err error) error {
-	if err != nil {
-		if e.wrap != nil {
-			err = errors.Wrap(err, e.wrap.Error())
-		}
-		e.logFunc(err)
+	if err == nil {
+		return nil
 	}
+	if e.wrap != nil {
+		err = errors.Wrap(err, e.wrap.Error())
+	}
+	e.logFunc(err)
+
 	return err
 }
