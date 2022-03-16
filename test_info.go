@@ -2,6 +2,8 @@ package errorlogger
 
 import (
 	"fmt"
+	"io"
+	"io/fs"
 	"os"
 
 	"github.com/pkg/errors"
@@ -12,10 +14,17 @@ import (
 // and benchmarks in this package.
 
 var (
-	testLogrusLogger  *logrus.Logger = logrus.New()
-	testDefaultLogger ErrorLogger    = NewWithOptions(true, "", nil, nil, testLogrusLogger)
-	errFake           error          = errors.New("fake")
-	fakeSysCallError  error          = os.NewSyscallError("fake syscall error", fmt.Errorf("fake syscall error"))
+	testLogrusLogger *Logger = &logrus.Logger{
+		Out:       io.Discard,
+		Formatter: new(logrus.TextFormatter),
+		Hooks:     make(logrus.LevelHooks),
+		Level:     logrus.DebugLevel,
+	}
+	testDefaultLogger ErrorLogger = NewWithOptions(true, "", nil, nil, testLogrusLogger)
+	errFake           error       = errors.New("fake")
+	fakeSysCallError  error       = os.NewSyscallError("fake syscall error", fmt.Errorf("fake syscall error"))
+	blankSysCallError error       = new(os.SyscallError)
+	blankPathError    error       = new(fs.PathError)
 )
 
 func newTestStruct(enabled bool, msg string, wrap error, fn func(args ...interface{}), logger *logrus.Logger) *errorLogger {

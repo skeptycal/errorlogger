@@ -2,6 +2,8 @@ package errorlogger
 
 import (
 	"fmt"
+	"io/ioutil"
+	"log"
 	"runtime"
 	"testing"
 	"time"
@@ -129,8 +131,8 @@ func TestNewJSONFormatter(t *testing.T) {
 	}{
 		{"new default JSON formatter", true, &JSONFormatter{logrus.JSONFormatter{PrettyPrint: true}}},
 	}
+	log.SetOutput(ioutil.Discard)
 	for _, tt := range tests {
-
 		fakeFunc := func(*runtime.Frame) (function string, file string) { return "", "" }
 		fakeMap := logrus.FieldMap{
 			logrus.FieldKeyTime:  "@timestamp",
@@ -154,6 +156,10 @@ func TestNewJSONFormatter(t *testing.T) {
 			got.SetDataKey("key")
 			got.SetFieldMap(fakeMap)
 			got.SetCallerPrettyfier(fakeFunc)
+			f := got.Formatter()
+			if _, ok := f.(Formatter); !ok {
+				t.Errorf("JSONFormatter.Formatter() does not implement Formatter interface: %v(%T)", f, f)
+			}
 		})
 	}
 }
