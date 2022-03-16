@@ -6,7 +6,7 @@ import "sync"
 // removed boolean flag and replaced with different functions
 
 type MutexEnable struct {
-	lock     sync.Mutex
+	lock     *sync.Mutex
 	fnLock   func()
 	fnUnlock func()
 }
@@ -31,7 +31,7 @@ func (mw *MutexEnable) Enable() {
 /// copy of MutexWrap from logrus for testing purposes
 
 type MutexWrap struct {
-	lock     sync.Mutex
+	lock     *sync.Mutex
 	disabled bool
 }
 
@@ -49,4 +49,8 @@ func (mw *MutexWrap) Unlock() {
 
 func (mw *MutexWrap) Disable() {
 	mw.disabled = true
+}
+
+func (mw *MutexWrap) Enable() {
+	mw.disabled = false
 }
