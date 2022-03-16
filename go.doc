@@ -184,14 +184,23 @@ To wrap all errors in a custom type, use:
 
 const DefaultTimestampFormat string ...
 var Log = New() ...
+var AllLevels = logrus.AllLevels ...
 func Example()
+type Entry = logrus.Entry
 type ErrorFunc = func(err error) error
 type ErrorLogger interface{ ... }
     func New() ErrorLogger
-    func NewWithOptions(enabled bool, fn LoggerFunc, wrap error, logger interface{}) ErrorLogger
+    func NewWithOptions(enabled bool, msg string, fn LoggerFunc, wrap error, logger *logrus.Logger) ErrorLogger
+type Fields = logrus.Fields
 type Formatter interface{ ... }
-    func NewJSONFormatter(pretty bool) Formatter
-    func NewTextFormatter() Formatter
 type JSONFormatter struct{ ... }
+    func NewJSONFormatter(pretty bool) *JSONFormatter
+type LenWriter struct{}
+type Level = logrus.Level
+    const PanicLevel Level = iota ...
 type LoggerFunc = func(args ...interface{})
+type MutexEnable struct{ ... }
+type MutexWrap struct{ ... }
+type NopWriter struct{}
 type TextFormatter struct{ ... }
+    func NewTextFormatter() *TextFormatter
