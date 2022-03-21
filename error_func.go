@@ -6,20 +6,6 @@ package errorlogger
 
 import "github.com/pkg/errors"
 
-type NopWriter struct{}
-
-// nopWriter_Write returns 0, nil no matter what the input is.
-func (NopWriter) Write(b []byte) (n int, err error) {
-	return 0, nil
-}
-
-type LenWriter struct{}
-
-// nopWriter_Write returns 0, nil no matter what the input is.
-func (LenWriter) Write(b []byte) (n int, err error) {
-	return 0, nil
-}
-
 // Disable disables logging and sets a no-op function for
 // Err() to prevent slowdowns while logging is disabled.
 func (e *errorLogger) Disable() {

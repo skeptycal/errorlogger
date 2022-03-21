@@ -6,10 +6,15 @@ package errorlogger
 
 import (
 	"fmt"
+	"io"
 	"testing"
 )
 
+type ()
+
 var (
+	discard = io.Discard
+
 	yesnologger     = New()
 	nopWriterlogger = NewWithOptions(true, "", nil, nil, nil)
 	lenWriterlogger = NewWithOptions(true, "", nil, nil, nil)
