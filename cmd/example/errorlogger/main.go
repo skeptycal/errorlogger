@@ -1,20 +1,26 @@
-// Copyright (c) 2021 Michael Treanor
-// https://github.com/skeptycal
-// MIT License
+// fake package name
 
-// Example for package errorlogger.
-package main
+package errorlogger
 
-import (
-	"fmt"
+// // Copyright (c) 2021 Michael Treanor
+// // https://github.com/skeptycal
+// // MIT License
 
-	"github.com/skeptycal/errorlogger"
-)
+// // Example for package errorlogger.
+// package main
 
-func main() {
-	fmt.Println("Example for the errorlogger package.")
-	errorlogger.Example()
+// import (
+// 	"fmt"
 
-	// add more code here ...
+// 	"github.com/skeptycal/errorlogger"
+// )
 
-}
+// func main() {
+// 	exampleLog := errorlogger.Log
+
+// 	exampleLog.Info("Example for the errorlogger package.")
+// 	errorlogger.Example()
+
+// 	// add more code here ...
+
+// }
