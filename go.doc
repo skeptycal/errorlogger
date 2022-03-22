@@ -186,6 +186,7 @@ const DefaultTimestampFormat string = time.RFC3339
 var Log = New() ...
 var AllLevels []Level = logrus.AllLevels
 func Example()
+func Size(a int) string
 type Entry = logrus.Entry
 type ErrorFunc = func(err error) error
 type ErrorLogger interface{ ... }
