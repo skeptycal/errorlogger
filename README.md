@@ -21,7 +21,7 @@
 -   [GitHub CLI](https://cli.github.com/)
 -
 
-Developed with 1.16.4. Go is _extremely_ backwards compatible and semver stable. Nearly any v1.x should work fine.
+Developed with Go 1.16.4. Updated to Go 1.18. Go is _extremely_ backwards compatible and semver stable. Nearly any v1.x should work fine.
 
 ---
 
