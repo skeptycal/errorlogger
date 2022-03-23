@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/skeptycal/errorlogger"
 	"github.com/skeptycal/errorlogger/cmd/example/executable/osargsutils"
@@ -17,12 +18,17 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	arg0 = filepath.Base(arg0)
 	fmt.Printf("%25.25s %s\n", "using Arg0():", arg0)
 
 	here, me, err := osargsutils.HereMe()
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	here = filepath.Base(here)
+
 	fmt.Printf("%25.25s - Here: %s Me: %s\n", "using HereMe():", here, me)
 
 }

@@ -27,7 +27,7 @@ var (
 	blankPathError    error       = new(fs.PathError)
 )
 
-func newTestStruct(enabled bool, msg string, wrap error, fn func(args ...interface{}), logger *logrus.Logger) *errorLogger {
+func newTestStruct(enabled bool, msg string, wrap error, fn func(args ...interface{}), logger *Logger) *errorLogger {
 	if logger == nil {
 		logger = defaultlogger
 	}
@@ -50,7 +50,7 @@ func newTestStruct(enabled bool, msg string, wrap error, fn func(args ...interfa
 		// the defaultErrWrap is actually nil ... so this is not needed.
 		// However, if the default is later changed to a package-wide
 		// wrapper, this will be a valid check
-		wrap = DefaultErrWrap
+		wrap = defaultErrWrap
 	}
 	e.wrap = wrap
 	return &e

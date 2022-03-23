@@ -11,7 +11,7 @@ type errorloggerTestArgs struct {
 	msg     string
 	wrap    error
 	fn      func(args ...interface{})
-	logger  *logrus.Logger
+	logger  *Logger
 }
 
 // internal tests directly on private structs
@@ -57,8 +57,8 @@ var (
 		{"NewWithOptions(false, nil, nil, nil)", errorloggerTestArgs{}, NewWithOptions(false, "", nil, nil, nil), false},
 		{"NewWithOptions(true, nil, nil, string)", errorloggerTestArgs{}, NewWithOptions(true, "", nil, nil, nil), false},
 		{"NewWithOptions(true, nil, nil, integer)", errorloggerTestArgs{}, NewWithOptions(true, "", nil, nil, nil), false},
-		{"NewWithOptions(all defaults ...)", errorloggerTestArgs{}, NewWithOptions(true, "", DefaultLogFunc, DefaultErrWrap, defaultlogger), false},
-		{"NewWithOptions(false, DefaultLogFunc, nil)", errorloggerTestArgs{}, NewWithOptions(true, "", DefaultLogFunc, nil, nil), false},
+		{"NewWithOptions(all defaults ...)", errorloggerTestArgs{}, NewWithOptions(true, "", defaultLogFunc, defaultErrWrap, defaultlogger), false},
+		{"NewWithOptions(false, DefaultLogFunc, nil)", errorloggerTestArgs{}, NewWithOptions(true, "", defaultLogFunc, nil, nil), false},
 
 		// Various tests using private struct
 		{"logrus logger in errorLogger (not public)", errorloggerTestArgs{}, &errorLogger{Logger: &logrus.Logger{}}, false},

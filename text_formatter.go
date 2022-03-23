@@ -6,17 +6,17 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-// defaultTextFormatter is the default log formatter. Use
+// DefaultTextFormatter is the default log formatter. Use
 //  Log.SetText()
 // or
-//  Log.SetFormatter(defaultTextFormatter)
+//  Log.SetFormatter(DefaultTextFormatter)
 // to return to default text formatting of logs.
 //
 // To change to another logrus formatter, use
 //  Log.SetFormatter(myFormatter)
 //
 // Reference: https://pkg.go.dev/github.com/sirupsen/logrus#TextFormatter
-var defaultTextFormatter Formatter = NewTextFormatter()
+var DefaultTextFormatter Formatter = NewTextFormatter()
 
 // TextFormatter formats logs into text.
 // Note: this is a logrus type with marginally useful

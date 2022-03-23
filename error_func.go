@@ -4,7 +4,9 @@
 
 package errorlogger
 
-import "github.com/pkg/errors"
+import (
+	"github.com/pkg/errors"
+)
 
 // Disable disables logging and sets a no-op function for
 // Err() to prevent slowdowns while logging is disabled.

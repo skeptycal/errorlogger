@@ -1,4 +1,4 @@
-package errorlogger // import "github.com/skeptycal/errorlogger"
+package errorlogger // import "github.com/skeptycal/goutil/errorlogger"
 
 Package errorlogger implements error logging to a variety of output formats.
 The goal of this package is to provide a simple and efficient mechanism for
@@ -182,18 +182,18 @@ To wrap all errors in a custom type, use:
 
     log.SetErrorWrap(myErrType{}) // wrap all errors in a custom type
 
-const DefaultTimestampFormat string = time.RFC3339
+const DefaultLogLevel Level = InfoLevel ...
 var Log = New() ...
 var AllLevels []Level = logrus.AllLevels
 func Example()
-func Size(a int) string
 type Entry = logrus.Entry
 type ErrorFunc = func(err error) error
 type ErrorLogger interface{ ... }
     func New() ErrorLogger
-    func NewWithOptions(enabled bool, msg string, fn LoggerFunc, wrap error, logger *logrus.Logger) ErrorLogger
+    func NewWithOptions(enabled bool, msg string, fn LoggerFunc, wrap error, logger *Logger) ErrorLogger
 type Fields = logrus.Fields
 type Formatter interface{ ... }
+    var DefaultTextFormatter Formatter = NewTextFormatter()
 type JSONFormatter struct{ ... }
     func NewJSONFormatter(pretty bool) *JSONFormatter
 type Level = logrus.Level

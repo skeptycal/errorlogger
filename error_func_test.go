@@ -10,14 +10,9 @@ import (
 	"testing"
 )
 
-type (
-	nopWriter = io.Writer // mock to avoid an extra dependency
-)
-
 var (
-	discard             = io.Discard
-	NopWriter nopWriter = io.Discard // mock to avoid an extra dependency
-	LenWriter nopWriter = io.Discard // mock to avoid an extra dependency
+	nopWriter io.Writer = io.Discard // mock to avoid an extra dependency
+	lenWriter io.Writer = io.Discard // mock to avoid an extra dependency
 
 	yesnologger     = New()
 	nopWriterlogger = NewWithOptions(true, "", nil, nil, nil)
@@ -32,14 +27,14 @@ func init() {
 	nillogger.Disable()
 	// nillogger.SetOutput(nil)
 
-	yesnologger.SetOutput(NopWriter)
+	yesnologger.SetOutput(nopWriter)
 	yesnologger.Enable()
 
-	logrusonly.SetOutput(NopWriter)
+	logrusonly.SetOutput(nopWriter)
 	logrusonly.Enable()
 
-	nopWriterlogger.SetOutput(NopWriter)
-	lenWriterlogger.SetOutput(LenWriter)
+	nopWriterlogger.SetOutput(nopWriter)
+	lenWriterlogger.SetOutput(lenWriter)
 }
 
 // benchmark results
@@ -189,7 +184,7 @@ func Test_nopWriter_Write(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			n := NopWriter
+			n := nopWriter
 			gotN, err := n.Write(tt.b)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("nopWriter.Write() error = %v, wantErr %v", err, tt.wantErr)

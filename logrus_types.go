@@ -11,6 +11,10 @@ import (
 
 const (
 
+	// InfoLevel level. General operational entries about what's going on inside the
+	// application.
+	DefaultLogLevel Level = InfoLevel
+
 	// DefaultTimestampFormat is time.RFC3339FA
 	//
 	// Note that this is not the most current standard but it is the
@@ -41,15 +45,21 @@ var (
 
 	// defaultlogger initializes a default logrus logger.
 	// Reference: https://github.com/sirupsen/logrus/
-	defaultlogger = &logrus.Logger{
+	defaultlogger = &Logger{
 		Out:       os.Stderr,
-		Formatter: defaultTextFormatter,
+		Formatter: DefaultTextFormatter,
 		Hooks:     make(logrus.LevelHooks),
-		Level:     defaultLogLevel,
+		Level:     DefaultLogLevel,
 	}
 )
 
 type (
+
+	// Fields type, used to pass to `WithFields`.
+	Fields = logrus.Fields
+
+	// An entry is the final or intermediate Logrus logging entry. It contains all the fields passed with WithField{,s}. It's finally logged when Trace, Debug, Info, Warn, Error, Fatal or Panic is called on it. These objects can be reused and passed around as much as you wish to avoid field duplication.
+	Entry = logrus.Entry
 
 	// Logger is the main structure used by errorlogger. It is a thinly veiled
 	// wrapper around logrus.Logger with some additional functionality.

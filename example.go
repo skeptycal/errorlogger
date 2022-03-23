@@ -7,7 +7,7 @@ package errorlogger
 import "fmt"
 
 func Example() {
-	exampleLog := Log
+	exampleLog := New()
 	exampleLog.Info("Example log info message...")
 	fmt.Println("Example import acknowledgement from package errorlogger")
 }

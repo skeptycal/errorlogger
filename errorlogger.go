@@ -179,19 +179,20 @@ var (
 	// nil or does not implement io.Writer.
 	ErrInvalidWriter = os.ErrInvalid
 
-	// DefaultLogFunc is Log.Error, which will log messages
+	// defaultLogFunc is Log.Error, which will log messages
 	// of level ErrorLevel or higher.
-	DefaultLogFunc LoggerFunc = defaultlogger.Error
+	defaultLogFunc LoggerFunc = defaultlogger.Error
 
-	// DefaultErrWrap is the default error used to wrap
+	// defaultErrWrap is the default error used to wrap
 	// errors processed with Err. A <nil> value disables
 	// error wrapping.
-	DefaultErrWrap error = nil
+	defaultErrWrap error = nil
+
+	// Discard is a Writer on which all Write calls succeed without doing anything.
+	DiscardWriter io.Writer = io.Discard
 )
 
 type (
-	Fields = logrus.Fields
-	Entry  = logrus.Entry
 
 	// LoggerFunc defines the function signature for logging functions.
 	LoggerFunc = func(args ...interface{})
@@ -250,11 +251,11 @@ type (
 	// errorLogger implements ErrorLogger with logrus or the
 	// standard library log package.
 	errorLogger struct {
-		wrap           error      // `default:"nil"` // nil = disabled
-		msg            string     // `default:""` // the empty string = disabled
-		errFunc        ErrorFunc  // `default:"()yesErr"`
-		logFunc        LoggerFunc // `default:"defaultLogFunc"`
-		*logrus.Logger            // `default:"defaultlogger"`
+		wrap    error      // `default:"nil"` // nil = disabled
+		msg     string     // `default:""` // the empty string = disabled
+		errFunc ErrorFunc  // `default:"()yesErr"`
+		logFunc LoggerFunc // `default:"defaultLogFunc"`
+		*Logger            // `default:"defaultlogger"`
 	}
 )
 
@@ -267,7 +268,7 @@ type (
 // instead of creating a new instance. For example:
 //  var mylogthatwontmessthingsup = errorlogger.Log
 func New() ErrorLogger {
-	return NewWithOptions(defaultEnabled, "", DefaultLogFunc, DefaultErrWrap, defaultlogger)
+	return NewWithOptions(defaultEnabled, "", defaultLogFunc, defaultErrWrap, defaultlogger)
 }
 
 // NewWithOptions returns a new ErrorLogger with options
@@ -281,7 +282,7 @@ func New() ErrorLogger {
 // - wrap: defines a custom error type to wrap all errors in.
 //
 // - logger: defines a custom logger to use.
-func NewWithOptions(enabled bool, msg string, fn LoggerFunc, wrap error, logger *logrus.Logger) ErrorLogger {
+func NewWithOptions(enabled bool, msg string, fn LoggerFunc, wrap error, logger *Logger) ErrorLogger {
 	return newTestStruct(enabled, msg, wrap, fn, logger)
 }
 
@@ -379,7 +380,7 @@ func (e *errorLogger) SetJSON(pretty bool) {
 //
 // - caption-json-formatter. logrus's message json formatter with human-readable caption added.
 // Reference: https://pkg.go.dev/github.com/sirupsen/logrus#TextFormatter
-func (e *errorLogger) SetText() { e.SetFormatter(defaultTextFormatter) }
+func (e *errorLogger) SetText() { e.SetFormatter(DefaultTextFormatter) }
 
 // SetLoggerFunc sets the logger function that is used to
 // write log messages. This allows rapid switching between loggers

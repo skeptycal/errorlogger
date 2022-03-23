@@ -157,6 +157,7 @@ func TestNewJSONFormatter(t *testing.T) {
 			got.SetFieldMap(fakeMap)
 			got.SetCallerPrettyfier(fakeFunc)
 			f := got.Formatter()
+			// f is already a Formatter by definition, so this should never fail ...
 			if _, ok := f.(Formatter); !ok {
 				t.Errorf("JSONFormatter.Formatter() does not implement Formatter interface: %v(%T)", f, f)
 			}
