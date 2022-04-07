@@ -157,15 +157,15 @@ func Test_errorLogger_noErr_yesErr(t *testing.T) {
 	}
 
 	for _, tt := range yesNoTests {
-		t.Run(tt.name+".noErr", func(t *testing.T) {
+		t.Run(tt.name+".noErr", func(_ *testing.T) {
 			fakeOuter = errorLoggerTestStruct.noErr(tt.input)
 		})
 
-		t.Run(tt.name+".yesErr", func(t *testing.T) {
+		t.Run(tt.name+".yesErr", func(_ *testing.T) {
 			fakeOuter = errorLoggerTestStruct.yesErr(tt.input)
 		})
 
-		t.Run(tt.name+"Err", func(t *testing.T) {
+		t.Run(tt.name+"Err", func(_ *testing.T) {
 			fakeOuter = errorLoggerTestStruct.Err(tt.input)
 		})
 	}

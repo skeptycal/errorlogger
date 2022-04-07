@@ -27,7 +27,7 @@ var (
 	blankPathError    error       = new(fs.PathError)
 )
 
-func newTestStruct(enabled bool, msg string, wrap error, fn func(args ...interface{}), logger *Logger) *errorLogger {
+func newTestStruct(enabled bool, msg string, wrap error, _ func(args ...interface{}), logger *Logger) *errorLogger {
 	if logger == nil {
 		logger = defaultlogger
 	}

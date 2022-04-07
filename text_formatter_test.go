@@ -41,7 +41,7 @@ func TestNewTextFormatter(t *testing.T) {
 			logrus.FieldKeyFunc:  "@caller",
 		}
 
-		t.Run(tt.name, func(t *testing.T) {
+		t.Run(tt.name, func(_ *testing.T) {
 
 			got := NewTextFormatter()
 
