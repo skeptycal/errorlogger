@@ -286,6 +286,10 @@ func NewWithOptions(enabled bool, msg string, fn LoggerFunc, wrap error, logger 
 	return newTestStruct(enabled, msg, wrap, fn, logger)
 }
 
+func (e *errorLogger) Writer() io.Writer {
+	return e.Out
+}
+
 // SetErrorWrap allows ErrorLogger to wrap all errors in a
 // specified custom error type.
 // Example:
