@@ -1,24 +1,5 @@
 
 mode: atomic
-github.com/skeptycal/goutil/errorlogger/errorlogger.go:270.24,272.2 1 16
-github.com/skeptycal/goutil/errorlogger/errorlogger.go:285.102,287.2 1 34
-github.com/skeptycal/goutil/errorlogger/errorlogger.go:289.42,291.2 1 0
-github.com/skeptycal/goutil/errorlogger/errorlogger.go:299.48,299.65 1 2
-github.com/skeptycal/goutil/errorlogger/errorlogger.go:309.52,309.67 1 2
-github.com/skeptycal/goutil/errorlogger/errorlogger.go:350.44,354.2 2 12
-github.com/skeptycal/goutil/errorlogger/errorlogger.go:387.33,387.73 1 12
-github.com/skeptycal/goutil/errorlogger/errorlogger.go:400.52,401.15 1 24
-github.com/skeptycal/goutil/errorlogger/errorlogger.go:401.15,403.3 1 12
-github.com/skeptycal/goutil/errorlogger/errorlogger.go:403.8,405.3 1 12
-github.com/skeptycal/goutil/errorlogger/errorlogger.go:411.53,413.16 2 24
-github.com/skeptycal/goutil/errorlogger/errorlogger.go:416.2,417.12 2 12
-github.com/skeptycal/goutil/errorlogger/errorlogger.go:413.16,415.3 1 12
-github.com/skeptycal/goutil/errorlogger/errorlogger.go:423.55,424.14 1 24
-github.com/skeptycal/goutil/errorlogger/errorlogger.go:431.2,431.23 1 12
-github.com/skeptycal/goutil/errorlogger/errorlogger.go:424.14,426.3 1 12
-github.com/skeptycal/goutil/errorlogger/errorlogger.go:432.17,434.13 2 12
-github.com/skeptycal/goutil/errorlogger/errorlogger.go:435.10,436.31 1 0
-github.com/skeptycal/goutil/errorlogger/example.go:9.16,13.2 3 0
 github.com/skeptycal/goutil/errorlogger/json_formatter.go:18.51,22.2 3 13
 github.com/skeptycal/goutil/errorlogger/json_formatter.go:24.47,26.2 1 1
 github.com/skeptycal/goutil/errorlogger/json_formatter.go:33.56,35.2 1 2
@@ -63,3 +44,22 @@ github.com/skeptycal/goutil/errorlogger/error_func.go:48.2,48.19 1 41
 github.com/skeptycal/goutil/errorlogger/error_func.go:51.2,53.12 2 41
 github.com/skeptycal/goutil/errorlogger/error_func.go:45.16,47.3 1 1
 github.com/skeptycal/goutil/errorlogger/error_func.go:48.19,50.3 1 1
+github.com/skeptycal/goutil/errorlogger/errorlogger.go:270.24,272.2 1 16
+github.com/skeptycal/goutil/errorlogger/errorlogger.go:285.102,287.2 1 34
+github.com/skeptycal/goutil/errorlogger/errorlogger.go:289.42,291.2 1 0
+github.com/skeptycal/goutil/errorlogger/errorlogger.go:299.48,299.65 1 2
+github.com/skeptycal/goutil/errorlogger/errorlogger.go:309.52,309.67 1 2
+github.com/skeptycal/goutil/errorlogger/errorlogger.go:350.44,354.2 2 12
+github.com/skeptycal/goutil/errorlogger/errorlogger.go:387.33,387.73 1 12
+github.com/skeptycal/goutil/errorlogger/errorlogger.go:400.52,401.15 1 24
+github.com/skeptycal/goutil/errorlogger/errorlogger.go:401.15,403.3 1 12
+github.com/skeptycal/goutil/errorlogger/errorlogger.go:403.8,405.3 1 12
+github.com/skeptycal/goutil/errorlogger/errorlogger.go:411.53,413.16 2 24
+github.com/skeptycal/goutil/errorlogger/errorlogger.go:416.2,417.12 2 12
+github.com/skeptycal/goutil/errorlogger/errorlogger.go:413.16,415.3 1 12
+github.com/skeptycal/goutil/errorlogger/errorlogger.go:423.55,424.14 1 24
+github.com/skeptycal/goutil/errorlogger/errorlogger.go:431.2,431.23 1 12
+github.com/skeptycal/goutil/errorlogger/errorlogger.go:424.14,426.3 1 12
+github.com/skeptycal/goutil/errorlogger/errorlogger.go:432.17,434.13 2 12
+github.com/skeptycal/goutil/errorlogger/errorlogger.go:435.10,436.31 1 0
+github.com/skeptycal/goutil/errorlogger/example.go:9.16,13.2 3 0
