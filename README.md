@@ -44,9 +44,11 @@ $ gh repo clone skeptycal/errorlogger
 $ cd errorlogger
 
 # test results and coverage info
-./go.test.sh
+$ ./go.test.sh
 
-go build -race
+ok  	github.com/skeptycal/errorlogger	0.251s	coverage: 93.3% of statements
+
+$ go build -race
 
 # install as a utility package
 go install
