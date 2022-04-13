@@ -16,9 +16,9 @@
 
 ### Prerequisites
 
--   [Go](https://golang.org/) - I recommend the latest stable release. At least 1.18 is required for generic features.
--   [Git](https://git-scm.com/) - I recommend the latest stable release.
--   [GitHub CLI](https://cli.github.com/) - you can use git on the command line if you wish, but the github cli is very nice ...
+-   [Go](Go) - I recommend the latest stable release. At least 1.18 is required for generic features.
+-   [Git](Git) - I recommend the latest stable release.
+-   [GitHub CLI](cli) - you can use git on the command line if you wish, but the github cli is very nice ...
 
 Developed with Go 1.16.4. Updated to Go 1.18. Go is _extremely_ backwards compatible and semver stable. Nearly any v1.x should work fine.
 
@@ -26,16 +26,13 @@ Developed with Go 1.16.4. Updated to Go 1.18. Go is _extremely_ backwards compat
 
 ### Installation
 
-
-
 To download the repo and use it as a dependency in your module:
 
 ```bash
-#
-go get github.com/skeptycal/errorlogger
+$ go get github.com/skeptycal/errorlogger
 ```
 
-To build and install this package as a utility on your machine so you can use it from the command line:
+To build and install this package as a utility (if it has a main package) on your machine so you can use it from the command line:
 
 ```bash
 
@@ -46,12 +43,11 @@ $ cd errorlogger
 # test results and coverage info
 $ ./go.test.sh
 
-ok  	github.com/skeptycal/errorlogger	0.251s	coverage: 93.3% of statements
-
+# build the application with race detection enabled.
 $ go build -race
 
 # install as a utility package
-go install
+$ go install
 ```
 
 ### Use Template
@@ -59,19 +55,20 @@ go install
 To use this repo as a template for your own project:
 
 ```sh
-gh repo create -y --public --template "https://github.com/skeptycal/errorlogger"
+$ gh repo create -y --public --template "https://github.com/skeptycal/errorlogger"
 ```
 
 ### Contributing
 
-To clone this repo to test and contribute, use `git clone` or `gh clone`.
+To clone this repo to test and contribute, use `git clone` or `gh repo clone`.
 
 ```sh
-gh repo clone skeptycal/errorlogger
+$ gh repo clone skeptycal/errorlogger
 
-cd errorlogger
+$ cd errorlogger
 
-git branch -b dev
+# or choose a name or issue you wish
+$ git branch -b dev
 
 ```
 
@@ -98,13 +95,11 @@ To try it out:
 
 ```sh
 # change to the sample folder
-cd cmd/example/errorlogger
+$ cd cmd/example/errorlogger
 
 # run the main.go program
-go run ./main.go
+$ go run ./main.go
 
-# to compile as an executable
-go build
 ```
 
 ---
@@ -134,6 +129,9 @@ See also the list of contributors who participated in this project.
 
 Licensed under the MIT <https://opensource.org/licenses/MIT> - see the [LICENSE](LICENSE) file for details.
 
+[go]: (https://golang.org/)
+[git]: (https://git-scm.com/)
+[cli]: (https://cli.github.com/)
 [twitter]: (https://www.twitter.com/skeptycal)
 [github]: (https://github.com/skeptycal)
 [campoy]: (https://github.com/campoy)
