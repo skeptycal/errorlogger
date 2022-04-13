@@ -16,10 +16,9 @@
 
 ### Prerequisites
 
--   [Go](https://golang.org/)
--   [Git](https://git-scm.com/)
--   [GitHub CLI](https://cli.github.com/)
--
+-   [Go](https://golang.org/) - I recommend the latest stable release. At least 1.18 is required for generic features.
+-   [Git](https://git-scm.com/) - I recommend the latest stable release.
+-   [GitHub CLI](https://cli.github.com/) - you can use git on the command line if you wish, but the github cli is very nice ...
 
 Developed with Go 1.16.4. Updated to Go 1.18. Go is _extremely_ backwards compatible and semver stable. Nearly any v1.x should work fine.
 
@@ -27,20 +26,30 @@ Developed with Go 1.16.4. Updated to Go 1.18. Go is _extremely_ backwards compat
 
 ### Installation
 
-To build and install this package as a utility on your machine.
+
+
+To download the repo and use it as a dependency in your module:
 
 ```bash
-# add repo to $GOPATH (xxxxxx is your computer login username)
-go get github.com/xxxxxx/errorlogger
+#
+go get github.com/skeptycal/errorlogger
+```
 
-cd ${GOPATH}/src/github.com/xxxxxx/errorlogger
+To build and install this package as a utility on your machine so you can use it from the command line:
+
+```bash
+
+$ gh repo clone skeptycal/errorlogger
+
+$ cd errorlogger
 
 # test results and coverage info
 ./go.test.sh
 
+go build -race
+
 # install as a utility package
 go install
-
 ```
 
 ### Use Template

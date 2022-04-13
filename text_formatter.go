@@ -155,8 +155,8 @@ func (f *TextFormatter) SetFullTimeStamp(yesno bool) {
 // time.Format or time.Parse from the standard library.
 // The standard Library already provides a set of predefined formats.
 // The recommended and default format is time.RFC3339.
-func (f *TextFormatter) SetTimestampFormat(fmt string) {
-	f.TimestampFormat = fmt
+func (f *TextFormatter) SetTimestampFormat(format string) {
+	f.TimestampFormat = format
 }
 
 // SetDisableSorting allows users to disable the default behavior
