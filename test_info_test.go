@@ -2,8 +2,6 @@ package errorlogger
 
 import (
 	"testing"
-
-	"github.com/sirupsen/logrus"
 )
 
 type errorloggerTestArgs struct {
@@ -61,7 +59,7 @@ var (
 		{"NewWithOptions(false, DefaultLogFunc, nil)", errorloggerTestArgs{}, NewWithOptions(true, "", defaultLogFunc, nil, nil), false},
 
 		// Various tests using private struct
-		{"logrus logger in errorLogger (not public)", errorloggerTestArgs{}, &errorLogger{Logger: &logrus.Logger{}}, false},
+		{"logrus logger in errorLogger (not public)", errorloggerTestArgs{}, &errorLogger{Logger: &Logger{}}, false},
 		{"default ErrorLogger with nil wrapper (not public)", errorloggerTestArgs{}, &errorLogger{wrap: nil}, false},
 		// Do not need a check for this in the constructor since errorLogger is not exported
 		// But something to be aware of ...

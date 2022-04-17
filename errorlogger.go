@@ -153,9 +153,7 @@
 package errorlogger
 
 import (
-	"io"
-	"os"
-
+	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 )
 
@@ -177,7 +175,7 @@ var (
 
 	// ErrInvalidWriter is returned when an output writer is
 	// nil or does not implement io.Writer.
-	ErrInvalidWriter = os.ErrInvalid
+	ErrInvalidWriter = ErrInvalid
 
 	// defaultLogFunc is Log.Error, which will log messages
 	// of level ErrorLevel or higher.
@@ -189,7 +187,15 @@ var (
 	defaultErrWrap error = nil
 
 	// Discard is a Writer on which all Write calls succeed without doing anything.
-	DiscardWriter io.Writer = io.Discard
+	DiscardWriter Writer = Discard
+)
+
+var (
+	ErrInvalid    = errors.New("invalid argument")
+	ErrPermission = errors.New("permission denied")
+	ErrExist      = errors.New("file already exists")
+	ErrNotExist   = errors.New("file does not exist")
+	ErrClosed     = errors.New("file already closed")
 )
 
 type (
@@ -286,7 +292,7 @@ func NewWithOptions(enabled bool, msg string, fn LoggerFunc, wrap error, logger 
 	return newTestStruct(enabled, msg, wrap, fn, logger)
 }
 
-func (e *errorLogger) Writer() io.Writer {
+func (e *errorLogger) Writer() Writer {
 	return e.Out
 }
 
@@ -420,7 +426,7 @@ func (e *errorLogger) SetLogLevel(lvl string) error {
 // SetLogOutput sets the output writer for logging.
 // The default is os.Stderr. Any io.Writer can be setup
 // to receive messages.
-func (e *errorLogger) SetLogOutput(w io.Writer) error {
+func (e *errorLogger) SetLogOutput(w Writer) error {
 	if w == nil {
 		return Err(ErrInvalidWriter)
 	}
@@ -429,7 +435,7 @@ func (e *errorLogger) SetLogOutput(w io.Writer) error {
 	// allowing other values to be passed and type
 	// checked internally
 	switch v := w.(type) {
-	case io.Writer:
+	case Writer:
 		e.SetOutput(v)
 		return nil
 	default:

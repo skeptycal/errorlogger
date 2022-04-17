@@ -2,8 +2,6 @@ package errorlogger
 
 import (
 	"fmt"
-	"io/ioutil"
-	"log"
 	"runtime"
 	"testing"
 	"time"
@@ -26,6 +24,7 @@ SmallJSONPrettyFormatter-8   	  310528      3880 ns/op    29.38 MB/s    1528 B/o
 LargeJSONPrettyFormatter-8   	   69073     17311 ns/op    23.68 MB/s    6226 B/op      78 allocs/op
 */
 
+var log = New()
 var (
 	// smallFields is a small size data set for benchmarking
 	smallFields = Fields{
@@ -131,7 +130,7 @@ func TestNewJSONFormatter(t *testing.T) {
 	}{
 		{"new default JSON formatter", true, &JSONFormatter{logrus.JSONFormatter{PrettyPrint: true}}},
 	}
-	log.SetOutput(ioutil.Discard)
+	log.SetOutput(Discard)
 	for _, tt := range tests {
 		fakeFunc := func(*runtime.Frame) (function string, file string) { return "", "" }
 		fakeMap := logrus.FieldMap{

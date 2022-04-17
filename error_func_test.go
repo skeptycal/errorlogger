@@ -6,13 +6,12 @@ package errorlogger
 
 import (
 	"fmt"
-	"io"
 	"testing"
 )
 
 var (
-	nopWriter io.Writer = io.Discard // mock to avoid an extra dependency
-	lenWriter io.Writer = io.Discard // mock to avoid an extra dependency
+	nopWriter Writer = Discard // mock to avoid an extra dependency
+	lenWriter Writer = Discard // mock to avoid an extra dependency
 
 	yesnologger     = New()
 	nopWriterlogger = NewWithOptions(true, "", nil, nil, nil)
@@ -174,7 +173,7 @@ func Test_errorLogger_noErr_yesErr(t *testing.T) {
 func Test_nopWriter_Write(t *testing.T) {
 	tests := []struct {
 		name    string
-		n       io.Writer
+		n       Writer
 		b       []byte
 		wantN   int
 		wantErr bool

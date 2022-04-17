@@ -8,7 +8,7 @@
 **/*temp
 **/*tmp
 **/.waka*
-
+.vscode
 
 ### Repo Specific ###
 **/idea.md

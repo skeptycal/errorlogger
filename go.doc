@@ -184,8 +184,14 @@ To wrap all errors in a custom type, use:
 
 const DefaultLogLevel Level = InfoLevel ...
 var Log = New() ...
+var ErrInvalid = errors.New("invalid argument") ...
 var AllLevels []Level = logrus.AllLevels
+var EOF = errors.New("EOF")
 func Example()
+func NewSyscallError(syscall string, err error) error
+func NopCloser(r io.Reader) io.ReadCloser
+func ReadAll(r Reader) ([]byte, error)
+type Closer interface{ ... }
 type Entry = logrus.Entry
 type ErrorFunc = func(err error) error
 type ErrorLogger interface{ ... }
@@ -200,5 +206,16 @@ type Level = logrus.Level
     const PanicLevel Level = iota ...
 type Logger = logrus.Logger
 type LoggerFunc = func(args ...interface{})
+type PathError struct{ ... }
+type ReadCloser interface{ ... }
+type ReadWriteCloser interface{ ... }
+type ReadWriter interface{ ... }
+type Reader interface{ ... }
+type ReaderFrom interface{ ... }
+type SyscallError struct{ ... }
 type TextFormatter struct{ ... }
     func NewTextFormatter() *TextFormatter
+type WriteCloser interface{ ... }
+type Writer interface{ ... }
+    var Discard Writer = discard{}
+type WriterTo interface{ ... }

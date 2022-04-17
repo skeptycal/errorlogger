@@ -1,5 +1,21 @@
 
 mode: atomic
+github.com/skeptycal/errorlogger/text_formatter.go:106.40,108.2 1 2
+github.com/skeptycal/errorlogger/text_formatter.go:112.52,114.2 1 2
+github.com/skeptycal/errorlogger/text_formatter.go:117.54,119.2 1 2
+github.com/skeptycal/errorlogger/text_formatter.go:122.51,124.2 1 2
+github.com/skeptycal/errorlogger/text_formatter.go:129.53,131.2 1 2
+github.com/skeptycal/errorlogger/text_formatter.go:135.66,137.2 1 2
+github.com/skeptycal/errorlogger/text_formatter.go:142.57,144.2 1 2
+github.com/skeptycal/errorlogger/text_formatter.go:149.54,151.2 1 2
+github.com/skeptycal/errorlogger/text_formatter.go:158.59,160.2 1 2
+github.com/skeptycal/errorlogger/text_formatter.go:166.55,168.2 1 2
+github.com/skeptycal/errorlogger/text_formatter.go:172.59,174.2 1 2
+github.com/skeptycal/errorlogger/text_formatter.go:177.63,179.2 1 2
+github.com/skeptycal/errorlogger/text_formatter.go:184.53,186.2 1 2
+github.com/skeptycal/errorlogger/text_formatter.go:190.57,192.2 1 2
+github.com/skeptycal/errorlogger/text_formatter.go:205.56,207.2 1 2
+github.com/skeptycal/errorlogger/text_formatter.go:213.101,215.2 1 1
 github.com/skeptycal/errorlogger/error_func.go:13.33,15.2 1 28
 github.com/skeptycal/errorlogger/error_func.go:18.32,20.2 1 36
 github.com/skeptycal/errorlogger/error_func.go:24.44,25.16 1 41
@@ -47,19 +63,4 @@ github.com/skeptycal/errorlogger/json_formatter.go:49.48,51.2 1 1
 github.com/skeptycal/errorlogger/json_formatter.go:64.56,66.2 1 1
 github.com/skeptycal/errorlogger/json_formatter.go:72.101,74.2 1 1
 github.com/skeptycal/errorlogger/json_formatter.go:77.53,79.2 1 16
-github.com/skeptycal/errorlogger/text_formatter.go:106.40,108.2 1 2
-github.com/skeptycal/errorlogger/text_formatter.go:112.52,114.2 1 2
-github.com/skeptycal/errorlogger/text_formatter.go:117.54,119.2 1 2
-github.com/skeptycal/errorlogger/text_formatter.go:122.51,124.2 1 2
-github.com/skeptycal/errorlogger/text_formatter.go:129.53,131.2 1 2
-github.com/skeptycal/errorlogger/text_formatter.go:135.66,137.2 1 2
-github.com/skeptycal/errorlogger/text_formatter.go:142.57,144.2 1 2
-github.com/skeptycal/errorlogger/text_formatter.go:149.54,151.2 1 2
-github.com/skeptycal/errorlogger/text_formatter.go:158.59,160.2 1 2
-github.com/skeptycal/errorlogger/text_formatter.go:166.55,168.2 1 2
-github.com/skeptycal/errorlogger/text_formatter.go:172.59,174.2 1 2
-github.com/skeptycal/errorlogger/text_formatter.go:177.63,179.2 1 2
-github.com/skeptycal/errorlogger/text_formatter.go:184.53,186.2 1 2
-github.com/skeptycal/errorlogger/text_formatter.go:190.57,192.2 1 2
-github.com/skeptycal/errorlogger/text_formatter.go:205.56,207.2 1 2
-github.com/skeptycal/errorlogger/text_formatter.go:213.101,215.2 1 1
+mode: atomic
