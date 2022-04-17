@@ -7,6 +7,7 @@ import (
 
 	"github.com/skeptycal/errorlogger"
 	"github.com/skeptycal/errorlogger/cmd/example/executable/osargsutils"
+	_ "github.com/skeptycal/goerepos/osargsutils"
 )
 
 var log = errorlogger.Log
